@@ -1,0 +1,40 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.resume-container {
+    margin-top: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 10px;
+    padding: 40px;
+}
+
+.control-button-div {
+    width: 100%;
+    height: 50px;
+}
+
+.control-button-panel {
+    float: right;
+}
+
+.control-button {
+    margin-left: 10px !important;
+}
+
+.devider-header-container {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.devider-header {
+    font-size: 26px;
+}

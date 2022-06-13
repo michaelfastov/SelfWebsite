@@ -1,0 +1,76 @@
+<div class="sections-container">
+    <mat-form-field appearance="fill">
+        <mat-label>Section Type</mat-label>
+        <mat-select [(value)]="sections.sectionType">
+            <mat-option *ngFor="let sectionType of sectionTypeNames | keyvalue" [value]="sectionType.key">
+                {{sectionType.value}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <form [formGroup]="form">
+        <div formArrayName="sectionsArray">
+            <div *ngFor="let child of control.controls; let i = index">
+                <div class="control-button-div">
+                    <div class="control-button-panel">
+                        <button (click)="DeleteSectionFromForm(i)" mat-raised-button color="accent"
+                            class="control-button">Delete Section</button>
+                    </div>
+                </div>
+                <div formGroupName="{{i}}" class="column-container">
+                    <div class="left-column">
+                        <mat-form-field appearance="fill" class="input-field">
+                            <mat-label>Title</mat-label>
+                            <input type="text" matInput formControlName="title" placeholder="Title">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="input-field">
+                            <mat-label>Company</mat-label>
+                            <input type="text" matInput formControlName="company" placeholder="Company">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="input-field">
+                            <mat-label>Job Title</mat-label>
+                            <input type="text" matInput formControlName="jobTitle" placeholder="Job Title">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="input-field">
+                            <mat-label>Description</mat-label>
+                            <input type="text" matInput formControlName="description" placeholder="Description">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="input-field">
+                            <mat-label>Separator</mat-label>
+                            <input matInput formControlName="separator" placeholder="Separator">
+                        </mat-form-field>
+                    </div>
+                    <div class="right-column">
+                        <mat-form-field appearance="fill" class="input-field-location">
+                            <mat-label>Location</mat-label>
+                            <input type="text" matInput formControlName="location" placeholder="Location">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="input-field-date">
+                            <mat-label>From</mat-label>
+                            <input matInput [matDatepicker]="fromPicker" formControlName="from">
+                            <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #fromPicker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="input-field-date">
+                            <mat-label>To</mat-label>
+                            <input matInput [matDatepicker]="toPicker" formControlName="to">
+                            <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #toPicker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="input-field">
+                            <mat-label>Content</mat-label>
+                            <textarea matInput formControlName="content" placeholder="Content"
+                                class="input-textarea"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="control-button-div">
+                <div class="control-button-panel">
+                    <button mat-raised-button (click)="AddSectionToForm()" color="primary" class="control-button">Add
+                        New
+                        {{GetSectionTypeName(sections.sectionType)}} Section</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

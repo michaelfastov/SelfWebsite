@@ -1,0 +1,33 @@
+<div class="links-container">
+    <div *ngFor="let link of links; let i = index">
+        <div class="control-button-div">
+            <div class="control-button-panel">
+                <button (click)="DeleteLink(i)" mat-raised-button color="accent" class="control-button">Delete
+                    Link</button>
+            </div>
+        </div>
+        <div class="column-container">
+            <div class="left-column">
+                <mat-form-field appearance="fill"  class="input-field">
+                    <mat-label>Link Type</mat-label>
+                    <mat-select [(value)]="link.linkType">
+                        <mat-option *ngFor="let linkType of linkTypeNames | keyvalue" [value]="linkType.key">
+                            {{linkType.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="right-column">
+                <mat-form-field appearance="fill" class="input-field">
+                    <mat-label>Address</mat-label>
+                    <input type="text" matInput [(ngModel)]="link.linkAddress" placeholder="Address">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div class="control-button-div">
+        <div class="control-button-panel">
+            <button mat-raised-button (click)="AddLink()" color="primary" class="control-button">Add Link</button>
+        </div>
+    </div>
+</div>

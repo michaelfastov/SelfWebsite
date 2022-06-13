@@ -1,0 +1,12 @@
+<div style="padding-bottom: 10px;">
+    <mat-card class="resume-container">
+        <p *ngIf="resume.name != ''" class="resume-name">{{resume.name}}</p>
+        <p *ngIf="resume.description != ''" class="resume-description">{{resume.description}}</p>
+        <mat-divider [inset]="true"></mat-divider>
+        <app-link [links]="resume.links"></app-link>
+        <mat-divider [inset]="true"></mat-divider>
+        <app-section *ngFor="let section of sections" [sectionType]="section.sectionType" [sections]="section.sections">
+        </app-section>
+        <mat-divider [inset]="true"></mat-divider>
+    </mat-card>
+</div>

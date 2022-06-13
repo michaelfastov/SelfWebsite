@@ -1,0 +1,18 @@
+<p class="section-type">{{GetSectionTypeName(sectionType)}}</p>
+
+<div *ngFor="let section of sections">
+    <p class="section-title">{{section.title}}</p>
+    <span class="section-description">{{section.description}}</span>
+    <div>
+        <span class="section-job-title">{{section.jobTitle}}</span>
+        <span class="section-company"> {{section.company}}</span>
+    </div>
+    <div>
+        <span class="section-location">{{section.location}}</span>
+    </div>
+    <div>
+        <span class="section-date">{{section.from | date: 'MM/yyyy'}} - {{section.to | date: 'MM/yyyy'}}</span>
+    </div>
+
+    <p class="section-content" [innerHTML]="section.content"></p>
+</div>

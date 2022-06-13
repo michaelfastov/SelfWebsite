@@ -1,0 +1,22 @@
+<div class="links-container">
+    <div *ngFor="let link of links">
+        <div *ngIf="link.linkType == LinkType.Email">
+
+            <a mat-stroked-button color="primary" class="link" href="mailto:{{link.linkAddress}}" target="_blank">
+                <fa-icon [icon]="['fas', 'envelope']"></fa-icon> {{link.linkAddress}}
+            </a>
+        </div>
+        <div *ngIf="link.linkType == LinkType.LinkedIn">
+            <a mat-stroked-button color="primary" class="link" href="{{link.linkAddress}}" target="_blank">
+                <fa-icon [icon]="['fab', 'linkedin']"></fa-icon>
+                {{GetLinkTypeName(link.linkType)}}
+            </a>
+        </div>
+        <div *ngIf="link.linkType == LinkType.GitHub">
+            <a mat-stroked-button color="primary" class="link" href="{{link.linkAddress}}" target="_blank">
+                <fa-icon [icon]="['fab', 'github']"></fa-icon>
+                {{GetLinkTypeName(link.linkType)}}
+            </a>
+        </div>
+    </div>
+</div>

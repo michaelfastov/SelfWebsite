@@ -1,0 +1,50 @@
+<div style="padding-bottom: 10px;">
+    <mat-card class="resume-container">
+        <div class="devider-header-container">
+            <span class="devider-header">Resume</span>
+            <mat-divider [inset]="true"></mat-divider>
+        </div>
+        <div class="resume-fields-container">
+            <div class="resume-fields">
+                <mat-form-field appearance="fill" class="input-field">
+                    <mat-label>Name</mat-label>
+                    <input type="text" matInput [(ngModel)]="resume.name" placeholder="Name">
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="input-field">
+                    <mat-label>Title</mat-label>
+                    <input type="text" matInput [(ngModel)]="resume.title" placeholder="Title">
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="input-field">
+                    <mat-label>Description</mat-label>
+                    <input type="text" matInput [(ngModel)]="resume.description" placeholder="Description">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="devider-header-container">
+            <span class="devider-header">Links</span>
+            <mat-divider [inset]="true"></mat-divider>
+        </div>
+        <app-link-admin [links]="resume.links"></app-link-admin>
+        <div class="devider-header-container">
+            <span class="devider-header">Sections</span>
+            <mat-divider [inset]="true"></mat-divider>
+        </div>
+        <div *ngFor="let section of sections; let i = index">
+            <app-section-admin [sections]="section"></app-section-admin>
+            <div class="control-button-div">
+                <div class="control-button-panel">
+                    <button (click)="DeleteSectionTypeFromForm(i)" mat-raised-button color="accent"
+                        class="control-button">Delete Section Type</button>
+                </div>
+            </div>
+        </div>
+        <div class="control-button-div">
+            <div class="control-button-panel">
+                <button mat-raised-button (click)="AddNewSectionType()" color="primary" class="control-button">Add New
+                    Section Type</button>
+                <button mat-raised-button (click)="SaveResume()" color="primary" class="control-button">Save
+                    Resume</button>
+            </div>
+        </div>
+    </mat-card>
+</div>

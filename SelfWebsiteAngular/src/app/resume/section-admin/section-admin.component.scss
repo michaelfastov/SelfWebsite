@@ -1,0 +1,39 @@
+.sections-container {
+    margin-top: 10px;
+}
+
+.column-container{
+    height: 420px;
+}
+
+.left-column {
+    float: left;
+    width: 49%;
+    //height: 400px;
+    //padding-bottom: 20px;
+}
+
+.right-column {
+    float: right;
+    width: 49%;
+    //height: 400px;
+    //padding-bottom: 20px;
+}
+
+.input-field {
+    width: 100%;
+}
+
+.input-field-date {
+    width: 20%;
+    padding-left: 5%;
+}
+
+.input-field-location {
+    width: 50%;
+}
+
+.input-textarea {
+    height: 260px;
+    resize: none;
+}
