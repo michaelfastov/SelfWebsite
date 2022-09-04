@@ -26,7 +26,7 @@ namespace SelfWebsiteApi.Controllers
             return await _resumeService.GetMainResume();
         }
 
-            [HttpGet("GetMainResumeTest")]
+        [HttpGet("GetMainResumeTest")]
         public async Task<ActionResult<ResumeModel>> GetMainResumeTest()
         {
             var resume = new ResumeModel();
