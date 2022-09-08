@@ -5,22 +5,22 @@ using SelfWebsiteApi.Database.Entities.ResumeEntities;
 using SelfWebsiteApi.Models;
 using SelfWebsiteApi.Models.ResumeModels;
 using SelfWebsiteApi.Services.Interfaces;
-using SelfWebsiteApi.Services.Interfaces.ResumeServices;
+using SelfWebsiteApi.Services.Interfaces.EntityFramework;
 
-namespace SelfWebsiteApi.Services.Implementations.ResumeServices
+namespace SelfWebsiteApi.Services.Implementations.EntityFramework
 {
-    public class ResumeService : IResumeService
+    public class EfResumeService : IEfResumeService
     {
         private readonly SelfWebsiteContext _context;
         private readonly IMapper _mapper;
 
-        private readonly ISectionService _sectionService;
-        private readonly ILinkService _linkService;
-        public ResumeService(
+        private readonly IEfSectionService _sectionService;
+        private readonly IEfLinkService _linkService;
+        public EfResumeService(
             SelfWebsiteContext context,
             IMapperProvider mapperProvider,
-            ILinkService linkService,
-            ISectionService sectionService)
+            IEfLinkService linkService,
+            IEfSectionService sectionService)
         {
             _context = context;
             _mapper = mapperProvider.GetMapper();
@@ -29,7 +29,7 @@ namespace SelfWebsiteApi.Services.Implementations.ResumeServices
             _sectionService = sectionService;
         }
 
-        public async Task<ResumeModel> GetMainResume()//add ability to select main resume on UI
+        public async Task<ResumeModel?> GetMainResume()//add ability to select main resume on UI
         {
             var entity = await _context.Resumes
                 .Include(x => x.Sections)
@@ -44,7 +44,7 @@ namespace SelfWebsiteApi.Services.Implementations.ResumeServices
             return null;
         }
 
-        public async Task<ResumeModel> CreateResume(ResumeModel resume)
+        public async Task<ResumeModel?> CreateResume(ResumeModel resume)
         {
             var resumeEntity = _mapper.Map<ResumeModel, Resume>(resume);
             var entity = _context.Add(resumeEntity).Entity;
@@ -53,7 +53,7 @@ namespace SelfWebsiteApi.Services.Implementations.ResumeServices
             return _mapper.Map<Resume, ResumeModel>(entity);
         }
 
-        public async Task<ResumeModel> UpdateResume(ResumeModel resume)
+        public async Task<ResumeModel?> UpdateResume(ResumeModel resume)
         {
             await _sectionService.DeleteSectionsNotInResume(resume);
             await _linkService.DeleteLinksNotInResume(resume);
@@ -65,19 +65,9 @@ namespace SelfWebsiteApi.Services.Implementations.ResumeServices
             return _mapper.Map<Resume, ResumeModel>(entity);
         }
 
-        public async Task<ResumeModel> CreateOrUpdateResume(ResumeModel resume)
+        public async Task<ResumeModel?> CreateOrUpdateResume(ResumeModel resume)
         {
-            ResumeModel result;
-            if (resume.Id == 0)
-            {
-                result = await CreateResume(resume);
-            }
-            else
-            {
-                result = await UpdateResume(resume);
-            }
-
-            return result;
+            return resume.Id == 0 ? await CreateResume(resume) : await UpdateResume(resume);
         }
 
         public async Task DeleteResume(int resumeId)

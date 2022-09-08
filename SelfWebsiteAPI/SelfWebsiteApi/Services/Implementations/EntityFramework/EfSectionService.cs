@@ -1,14 +1,14 @@
 ﻿using SelfWebsiteApi.Database;
 using SelfWebsiteApi.Models.ResumeModels;
-using SelfWebsiteApi.Services.Interfaces.ResumeServices;
+using SelfWebsiteApi.Services.Interfaces.EntityFramework;
 
-namespace SelfWebsiteApi.Services.Implementations.ResumeServices
+namespace SelfWebsiteApi.Services.Implementations.EntityFramework
 {
-    public class SectionService : ISectionService
+    public class EfSectionService : IEfSectionService
     {
         private readonly SelfWebsiteContext _context;
 
-        public SectionService(
+        public EfSectionService(
             SelfWebsiteContext context)
         {
             _context = context;

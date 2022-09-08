@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
             localStorage.setItem(environment.accessTokenName, response.accessToken);
             localStorage.setItem(environment.refreshTokenName, response.refreshToken);
             this.isInvalidLogin = false;
-            console.log(response.accessToken)
             //this.router.navigate(["/"]);
           }
         })

@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SelfWebsiteApi.Enums.Auth;
 using SelfWebsiteApi.Enums.Resume;
 using SelfWebsiteApi.Models.ResumeModels;
-using SelfWebsiteApi.Services.Interfaces.ResumeServices;
-using System.Configuration;
+using SelfWebsiteApi.Services.Interfaces;
+using SelfWebsiteApi.Services.Interfaces.EntityFramework;
 
 namespace SelfWebsiteApi.Controllers
 {
@@ -21,7 +18,7 @@ namespace SelfWebsiteApi.Controllers
         }
 
         [HttpGet("GetMainResume")]
-        public async Task<ActionResult<ResumeModel>> GetMainResume()
+        public async Task<ActionResult<ResumeModel?>> GetMainResume()
         {
             return await _resumeService.GetMainResume();
         }
@@ -85,7 +82,7 @@ namespace SelfWebsiteApi.Controllers
         }
 
         [HttpPost("admin/CreateResume"), Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ResumeModel>> CreateResume([FromBody] ResumeModel resume)
+        public async Task<ActionResult<ResumeModel?>> CreateResume([FromBody] ResumeModel resume)
         {
             var resumeResult = await _resumeService.CreateResume(resume);
 
@@ -98,7 +95,7 @@ namespace SelfWebsiteApi.Controllers
         }
 
         [HttpPut("admin/UpdateResume"), Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ResumeModel>> UpdateResume([FromBody] ResumeModel resume)
+        public async Task<ActionResult<ResumeModel?>> UpdateResume([FromBody] ResumeModel resume)
         {
             var resumeResult = await _resumeService.UpdateResume(resume);
 
@@ -111,7 +108,7 @@ namespace SelfWebsiteApi.Controllers
         }
 
         [HttpPost("admin/CreateOrUpdateResume"), Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ResumeModel>> CreateOrUpdateResume([FromBody] ResumeModel resume)
+        public async Task<ActionResult<ResumeModel?>> CreateOrUpdateResume([FromBody] ResumeModel resume)
          {
             var resumeResult = await _resumeService.CreateOrUpdateResume(resume);
 

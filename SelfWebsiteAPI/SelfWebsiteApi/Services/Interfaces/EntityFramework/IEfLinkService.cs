@@ -1,8 +1,8 @@
 ﻿using SelfWebsiteApi.Models.ResumeModels;
 
-namespace SelfWebsiteApi.Services.Interfaces.ResumeServices
+namespace SelfWebsiteApi.Services.Interfaces.EntityFramework
 {
-    public interface ILinkService
+    public interface IEfLinkService
     {
         Task DeleteLinksNotInResume(ResumeModel resume);
     }

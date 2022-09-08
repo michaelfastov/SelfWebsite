@@ -1,14 +1,14 @@
 ﻿using SelfWebsiteApi.Database;
 using SelfWebsiteApi.Models.ResumeModels;
-using SelfWebsiteApi.Services.Interfaces.ResumeServices;
+using SelfWebsiteApi.Services.Interfaces.EntityFramework;
 
-namespace SelfWebsiteApi.Services.Implementations.ResumeServices
+namespace SelfWebsiteApi.Services.Implementations.EntityFramework
 {
-    public class LinkService : ILinkService
+    public class EfLinkService : IEfLinkService
     {
         private readonly SelfWebsiteContext _context;
 
-        public LinkService(
+        public EfLinkService(
             SelfWebsiteContext context)
         {
             _context = context;

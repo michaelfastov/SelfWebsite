@@ -5,15 +5,22 @@ using Microsoft.IdentityModel.Tokens;
 using SelfWebsiteApi.Database;
 using SelfWebsiteApi.Services.Implementations;
 using SelfWebsiteApi.Services.Implementations.Auth;
-using SelfWebsiteApi.Services.Implementations.ResumeServices;
+using SelfWebsiteApi.Services.Implementations.EntityFramework;
+using SelfWebsiteApi.Services.Implementations.Mongo;
 using SelfWebsiteApi.Services.Interfaces;
 using SelfWebsiteApi.Services.Interfaces.Auth;
-using SelfWebsiteApi.Services.Interfaces.ResumeServices;
+using SelfWebsiteApi.Services.Interfaces.EntityFramework;
+using SelfWebsiteApi.Services.Interfaces.Mongo;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var origin = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Name");
 var angularLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Link");
+
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDbSettings")); 
+builder.Services.Configure<EntityFrameworkSettings>(
+    builder.Configuration.GetSection("EntityFrameworkSettings"));
 
 builder.Services.AddCors(options =>
 {
@@ -56,9 +63,13 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IEfResumeService, EfResumeService>();
+builder.Services.AddTransient<IEfLinkService, EfLinkService>();
+builder.Services.AddTransient<IEfSectionService, EfSectionService>();
+builder.Services.AddSingleton<IMongoCollectionProvider, MongoCollectionProvider>();
+builder.Services.AddTransient<IMongoResumeService, MongoResumeService>();
 builder.Services.AddTransient<IResumeService, ResumeService>();
-builder.Services.AddTransient<ILinkService, LinkService>();
-builder.Services.AddTransient<ISectionService, SectionService>();
+
 builder.Services.AddSingleton<IMapperProvider, MapperProvider>();
 var app = builder.Build();
 

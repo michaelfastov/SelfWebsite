@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SelfWebsiteApi.Database.Entities.ResumeEntities;
+using SelfWebsiteApi.Models.Mongo;
 using SelfWebsiteApi.Models.ResumeModels;
 
 namespace SelfWebsiteApi.Models
@@ -15,6 +16,9 @@ namespace SelfWebsiteApi.Models
             CreateMap<ResumeModel, Resume>();
             CreateMap<SectionModel, Section>();
             CreateMap<LinkModel, Link>();
+
+            CreateMap<ResumeMongo, ResumeModel>();
+            CreateMap<ResumeModel, ResumeMongo>();
         }
     }
 }

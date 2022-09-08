@@ -16,7 +16,9 @@ export class ResumeAdminComponent implements OnInit {
   public resume: IResume = {} as IResume;
   public sections: Array<ISectionTypeSectionPair> = [];
 
-  constructor(private resumeService: ResumeService, private resumeSectionInteractionService: ResumeChildrenInteractionService) { }
+  constructor(private resumeService: ResumeService, private resumeSectionInteractionService: ResumeChildrenInteractionService) {
+    this.resume.links = [];
+  }
 
   ngOnInit(): void {
     this.resumeService.GetMainResume()
