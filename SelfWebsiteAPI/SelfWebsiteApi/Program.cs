@@ -5,10 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 using SelfWebsiteApi.Database;
 using SelfWebsiteApi.Services.Implementations;
 using SelfWebsiteApi.Services.Implementations.Auth;
+using SelfWebsiteApi.Services.Implementations.Elastic;
 using SelfWebsiteApi.Services.Implementations.EntityFramework;
 using SelfWebsiteApi.Services.Implementations.Mongo;
 using SelfWebsiteApi.Services.Interfaces;
 using SelfWebsiteApi.Services.Interfaces.Auth;
+using SelfWebsiteApi.Services.Interfaces.Elastic;
 using SelfWebsiteApi.Services.Interfaces.EntityFramework;
 using SelfWebsiteApi.Services.Interfaces.Mongo;
 using System.Text;
@@ -17,6 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 var origin = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Name");
 var angularLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Link");
 
+builder.Services.Configure<ElasticSettings>(
+    builder.Configuration.GetSection("ElasticSettings"));
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDbSettings")); 
 builder.Services.Configure<EntityFrameworkSettings>(
@@ -63,6 +67,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddSingleton<IElasticClientProvider, ElasticClientProvider>();
+builder.Services.AddTransient<IElasticResumeService, ElasticResumeService>();
 builder.Services.AddTransient<IEfResumeService, EfResumeService>();
 builder.Services.AddTransient<IEfLinkService, EfLinkService>();
 builder.Services.AddTransient<IEfSectionService, EfSectionService>();

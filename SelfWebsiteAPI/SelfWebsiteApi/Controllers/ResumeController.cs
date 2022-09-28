@@ -17,6 +17,13 @@ namespace SelfWebsiteApi.Controllers
             _resumeService = resumeService;
         }
 
+
+        [HttpGet("SearchResume")]
+        public async Task<ActionResult<List<ResumeModel>>> SearchResume(string input)
+        {
+            return await _resumeService.SearchResume(input);
+        }
+
         [HttpGet("GetMainResume")]
         public async Task<ActionResult<ResumeModel?>> GetMainResume()
         {

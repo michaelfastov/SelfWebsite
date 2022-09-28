@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.4" />
     <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
+    <PackageReference Include="NEST" Version="7.17.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
@@ -28,6 +29,10 @@
     <None Update="..\.dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Elastic\" />
   </ItemGroup>
 
 </Project>

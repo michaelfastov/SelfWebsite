@@ -1,12 +1,12 @@
 ﻿using SelfWebsiteApi.Models.ResumeModels;
 
-namespace SelfWebsiteApi.Services.Interfaces
+namespace SelfWebsiteApi.Services.Interfaces.Elastic
 {
-    public interface IResumeService
+    public interface IElasticResumeService
     {
-        Task<List<ResumeModel>> SearchResume(string input);
         Task<ResumeModel?> GetMainResume();
-        Task<ResumeModel?> CreateResume(ResumeModel resume);
+        Task<List<ResumeModel>> SearchResume(string input);
+        Task CreateResume(ResumeModel resume);
         Task<ResumeModel?> UpdateResume(ResumeModel resume);
         Task<ResumeModel?> CreateOrUpdateResume(ResumeModel resume);
         Task DeleteResume(int resumeId);
