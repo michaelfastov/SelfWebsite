@@ -30,8 +30,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(origin, builder =>
     {
-        builder.WithOrigins(angularLink)
-        //.AllowAnyOrigin()
+        builder//.WithOrigins(angularLink)
+        .AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();
     });
@@ -79,12 +79,12 @@ builder.Services.AddTransient<IResumeService, ResumeService>();
 builder.Services.AddSingleton<IMapperProvider, MapperProvider>();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     IdentityModelEventSource.ShowPII = true;
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(origin);

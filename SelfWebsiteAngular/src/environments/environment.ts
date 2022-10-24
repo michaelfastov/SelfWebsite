@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "https://localhost:7131/api",
+  apiUrl: "https://chisatochka.azurewebsites.net/api",//https://localhost:7131/api",
   accessTokenName: "AccessToken",
   refreshTokenName: "RefreshToken"
 };

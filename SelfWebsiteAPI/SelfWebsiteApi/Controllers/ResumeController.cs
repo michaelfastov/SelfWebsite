@@ -27,7 +27,14 @@ namespace SelfWebsiteApi.Controllers
         [HttpGet("GetMainResume")]
         public async Task<ActionResult<ResumeModel?>> GetMainResume()
         {
-            return await _resumeService.GetMainResume();
+            try
+            {
+                return await _resumeService.GetMainResume();
+            }
+            catch(Exception ex)
+            {
+                return Problem(ex.Message + " => "+ ex.ToString());
+            }
         }
 
         [HttpGet("GetMainResumeTest")]
