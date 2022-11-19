@@ -36,7 +36,7 @@ builder.Services.AddCors(options =>
         //.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader()
-        .AllowCredentials();//Importnat for SignalR
+        .AllowCredentials();//Important for SignalR
     });
 });
 builder.Services.AddControllers().AddNewtonsoftJson();
