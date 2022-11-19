@@ -4,9 +4,11 @@
 
 export const environment = {
   production: false,
-  apiUrl: "https://chisatochka.azurewebsites.net/api",//https://localhost:7131/api",
+  apiUrl: "https://chisatochka.azurewebsites.net/api",
+  pixivLinksHubUrl: "https://chisatochka.azurewebsites.net/pixivLinks",
   accessTokenName: "AccessToken",
-  refreshTokenName: "RefreshToken"
+  refreshTokenName: "RefreshToken",
+  linkPreviewKey: "55d8e7ca0511320e62f31f2b7b0249a0"
 };
 
 /*

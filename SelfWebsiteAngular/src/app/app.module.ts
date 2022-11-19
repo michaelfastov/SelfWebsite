@@ -22,7 +22,9 @@ import { LinkAdminComponent } from './resume/link-admin/link-admin.component';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PixivLinksComponent } from './pixiv-links/pixiv-links/pixiv-links.component'
+import { PixivLinksSignalrService } from './services/pixiv-links-signalr.service';
 
 export function tokenGetter() {
   return localStorage.getItem(environment.accessTokenName);
@@ -37,7 +39,8 @@ export function tokenGetter() {
     SectionComponent,
     SectionAdminComponent,
     LinkComponent,
-    LinkAdminComponent
+    LinkAdminComponent,
+    PixivLinksComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,8 @@ export function tokenGetter() {
   ],
   providers: [
     ResumeService,
-    ResumeChildrenInteractionService
+    ResumeChildrenInteractionService,
+    PixivLinksSignalrService
   ],
   bootstrap: [InitialComponent]
 })

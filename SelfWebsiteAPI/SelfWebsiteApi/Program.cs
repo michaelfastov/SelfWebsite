@@ -14,6 +14,8 @@ using SelfWebsiteApi.Services.Interfaces.Elastic;
 using SelfWebsiteApi.Services.Interfaces.EntityFramework;
 using SelfWebsiteApi.Services.Interfaces.Mongo;
 using System.Text;
+using Telegram.Bot;
+using TelegramBot.PixivLinksBot;
 
 var builder = WebApplication.CreateBuilder(args);
 var origin = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Name");
@@ -22,7 +24,7 @@ var angularLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Lin
 builder.Services.Configure<ElasticSettings>(
     builder.Configuration.GetSection("ElasticSettings"));
 builder.Services.Configure<MongoDbSettings>(
-    builder.Configuration.GetSection("MongoDbSettings")); 
+    builder.Configuration.GetSection("MongoDbSettings"));
 builder.Services.Configure<EntityFrameworkSettings>(
     builder.Configuration.GetSection("EntityFrameworkSettings"));
 
@@ -33,12 +35,16 @@ builder.Services.AddCors(options =>
         builder//.WithOrigins(angularLink)
         .AllowAnyOrigin()
         .AllowAnyMethod()
-        .AllowAnyHeader();
+        .AllowAnyHeader()
+        .AllowCredentials();//Importnat for SignalR
     });
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
+//builder.Services.AddLogging();
+
 builder.Services.AddDbContext<SelfWebsiteContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SelfWebsiteDatabase")));
 builder.Services
@@ -77,6 +83,14 @@ builder.Services.AddTransient<IMongoResumeService, MongoResumeService>();
 builder.Services.AddTransient<IResumeService, ResumeService>();
 
 builder.Services.AddSingleton<IMapperProvider, MapperProvider>();
+
+//TelegramBot
+builder.Services.AddHostedService<PixivLinksBotWebhookService>();
+builder.Services.AddScoped<PixivLinksBotService>();
+builder.Services.AddHttpClient("PixivLinksBotClient")
+    .AddTypedClient<ITelegramBotClient>(
+    httpClient => new TelegramBotClient(builder.Configuration.GetValue<string>("TelegramBots:PixivLinksBotToken"), httpClient));
+
 var app = builder.Build();
 
 //if (app.Environment.IsDevelopment())
@@ -90,5 +104,15 @@ app.UseRouting();
 app.UseCors(origin);
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    var token = builder.Configuration.GetValue<string>("TelegramBots:PixivLinksBotToken");
+    endpoints.MapControllerRoute(
+        name: "PixivLinksBotWebhook",
+        pattern: $"{token}",
+        new { controller = "PixivLinksBot", action = "Post" });
+    endpoints.MapHub<PixivLinksHub>("/pixivLinks");
+    endpoints.MapControllers();
+});
+
 app.Run();

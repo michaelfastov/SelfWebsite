@@ -1,0 +1,7 @@
+<div class="list-container">
+    <div *ngFor="let link of links" class="link-preview-container">
+        <a href="{{link.url}}">{{link.url}}</a>
+        <p>{{link.title}}</p>
+        <img [src]="link.image" class="image">
+    </div>
+</div>
