@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot;
+using Microsoft.Extensions.Logging;
 
 namespace TelegramBot.PixivLinksBot
 {
@@ -15,13 +16,16 @@ namespace TelegramBot.PixivLinksBot
     {
         private readonly IServiceProvider _services;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<PixivLinksBotWebhookService> _logger;
 
         public PixivLinksBotWebhookService(
             IServiceProvider serviceProvider,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ILogger<PixivLinksBotWebhookService> logger)
         {
             _services = serviceProvider;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -37,6 +41,8 @@ namespace TelegramBot.PixivLinksBot
                 url: webhookAddress,
                 allowedUpdates: Array.Empty<UpdateType>(),
                 cancellationToken: cancellationToken);
+
+            _logger.LogInformation($"Webhook set. Url: {webhookAddress}");
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

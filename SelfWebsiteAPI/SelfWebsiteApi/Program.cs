@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NLog;
+using NLog.Web;
 using SelfWebsiteApi.Database;
 using SelfWebsiteApi.Services.Implementations;
 using SelfWebsiteApi.Services.Implementations.Auth;
@@ -18,6 +20,8 @@ using Telegram.Bot;
 using TelegramBot.PixivLinksBot;
 
 var builder = WebApplication.CreateBuilder(args);
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+
 var origin = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Name");
 var angularLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Link");
 
@@ -43,7 +47,13 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
-//builder.Services.AddLogging();
+
+
+// NLog: Setup NLog for Dependency injection
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
+
 
 builder.Services.AddDbContext<SelfWebsiteContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SelfWebsiteDatabase")));
