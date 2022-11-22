@@ -24,7 +24,7 @@ var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentCla
 
 var origin = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Name");
 var azueAngularLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:AzureAngularLink");
-var domenLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:DomenLink");
+var domainLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:DomainLink");
 
 builder.Services.Configure<ElasticSettings>(
     builder.Configuration.GetSection("ElasticSettings"));
@@ -37,7 +37,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(origin, builder =>
     {
-        builder.WithOrigins(azueAngularLink, domenLink)
+        builder.WithOrigins(azueAngularLink, domainLink)
         //.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader()
