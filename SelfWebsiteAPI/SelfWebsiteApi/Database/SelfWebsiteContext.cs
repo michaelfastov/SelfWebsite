@@ -15,5 +15,6 @@ namespace SelfWebsiteApi.Database
         public DbSet<Resume> Resumes { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Link> Links { get; set; }
+        public DbSet<Entities.NLog> NLogs { get; set; }
     }
 }

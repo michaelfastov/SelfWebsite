@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SelfWebsiteApi.Database;
 
@@ -11,9 +12,10 @@ using SelfWebsiteApi.Database;
 namespace SelfWebsiteApi.Migrations
 {
     [DbContext(typeof(SelfWebsiteContext))]
-    partial class SelfWebsiteContextModelSnapshot : ModelSnapshot
+    [Migration("20221121173508_NLog")]
+    partial class NLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
