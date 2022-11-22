@@ -23,7 +23,8 @@ var builder = WebApplication.CreateBuilder(args);
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
 var origin = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Name");
-var angularLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:Link");
+var azueAngularLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:AzureAngularLink");
+var domainLink = builder.Configuration.GetValue<string>("SelfWebsiteAngular:DomainLink");
 
 builder.Services.Configure<ElasticSettings>(
     builder.Configuration.GetSection("ElasticSettings"));
@@ -36,8 +37,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(origin, builder =>
     {
-        builder//.WithOrigins(angularLink)
-        .AllowAnyOrigin()
+        builder.WithOrigins(azueAngularLink, domainLink)
+        //.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();//Important for SignalR
