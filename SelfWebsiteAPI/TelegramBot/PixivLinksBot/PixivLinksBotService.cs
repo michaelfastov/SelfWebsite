@@ -18,7 +18,7 @@ namespace TelegramBot.PixivLinksBot
 
         public async Task ProcessUpdate(Update update)
         {
-            _logger.LogInformation($"Update received. ChannelPost: {update.ChannelPost}");
+            _logger.LogInformation($"Update received. ChannelPost: {update.ChannelPost?.Text}");
             if (update.ChannelPost != null)
             {
                 var link = update.ChannelPost!.Text;
