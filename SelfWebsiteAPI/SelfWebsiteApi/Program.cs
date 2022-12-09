@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using NLog.Web;
+using NuGet.ProjectModel;
 using SelfWebsiteApi.Database;
+using SelfWebsiteApi.Middlewares;
+using SelfWebsiteApi.Models.GraphQL;
 using SelfWebsiteApi.Services.Implementations;
 using SelfWebsiteApi.Services.Implementations.Auth;
 using SelfWebsiteApi.Services.Implementations.Elastic;
@@ -15,6 +19,7 @@ using SelfWebsiteApi.Services.Interfaces.Auth;
 using SelfWebsiteApi.Services.Interfaces.Elastic;
 using SelfWebsiteApi.Services.Interfaces.EntityFramework;
 using SelfWebsiteApi.Services.Interfaces.Mongo;
+using System.Net;
 using System.Text;
 using Telegram.Bot;
 using TelegramBot.PixivLinksBot;
@@ -49,6 +54,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
+//GraphQL setup
+builder.Services
+    .AddTransient<Query>()
+    .AddGraphQLServer()
+    .AddQueryType<Query>();
 
 // NLog: Setup NLog for Dependency injection
 builder.Logging.ClearProviders();
@@ -96,21 +106,47 @@ builder.Services.AddTransient<IResumeService, ResumeService>();
 builder.Services.AddSingleton<IMapperProvider, MapperProvider>();
 
 //TelegramBot
-builder.Services.AddHostedService<PixivLinksBotWebhookService>();
-builder.Services.AddScoped<PixivLinksBotService>();
-builder.Services.AddHttpClient("PixivLinksBotClient")
-    .AddTypedClient<ITelegramBotClient>(
-    httpClient => new TelegramBotClient(builder.Configuration.GetValue<string>("TelegramBots:PixivLinksBotToken"), httpClient));
-
+if (builder.Configuration.GetValue<bool>("TelegramBots:IsActive"))
+{
+    builder.Services.AddHostedService<PixivLinksBotWebhookService>();
+    builder.Services.AddScoped<PixivLinksBotService>();
+    builder.Services.AddHttpClient("PixivLinksBotClient")
+        .AddTypedClient<ITelegramBotClient>(
+        httpClient => new TelegramBotClient(builder.Configuration.GetValue<string>("TelegramBots:PixivLinksBotToken"), httpClient));
+}
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    IdentityModelEventSource.ShowPII = true;
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+IdentityModelEventSource.ShowPII = true;
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
+
+app.MapGraphQL();
+
+app.UseExceptionHandler(
+             options =>
+             {
+                 options.Run(
+                     async context =>
+                     {
+                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                         context.Response.ContentType = "text/html";
+                         var ex = context.Features.Get<IExceptionHandlerFeature>();
+                         if (ex != null)
+                         {
+                             var err = $"Error: {ex.Error.Message}\nStackTrace: {ex.Error.StackTrace}";
+                             await context.Response.WriteAsync(err).ConfigureAwait(false);
+                         }
+                     });
+             }
+         );
+
+
 app.UseHttpsRedirection();
+app.UseRequestCulture();
+
 app.UseRouting();
 app.UseCors(origin);
 app.UseAuthentication();
