@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
@@ -111,8 +112,20 @@ builder.Services.AddTransient<IResumeService, ResumeService>();
 builder.Services.AddSingleton<IMapperProvider, MapperProvider>();
 
 //Redis
-var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("Redis:PixivLinksDbUrl"));
-builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+//var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("Redis:PixivLinksDbUrl"));
+//builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+
+var redisOptions = new ConfigurationOptions
+{
+    EndPoints = { builder.Configuration.GetValue<string>("Redis:PixivLinksDbUrl") },
+    Password = builder.Configuration.GetValue<string>("Redis:PixivLinksDbPassword"),
+    ConnectRetry = 5,
+    ConnectTimeout = 5000,
+    SyncTimeout = 5000
+};
+
+var redis = ConnectionMultiplexer.Connect(redisOptions);
+builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
 //TelegramBot
 if (builder.Configuration.GetValue<bool>("TelegramBots:IsActive"))
