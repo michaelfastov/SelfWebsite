@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using NLog.Web;
 using NuGet.ProjectModel;
+using RedisCache.PixivLinksBot;
 using SelfWebsiteApi.Database;
+using SelfWebsiteApi.Database.Entities.Auth;
 using SelfWebsiteApi.Middlewares;
 using SelfWebsiteApi.Models.GraphQL;
 using SelfWebsiteApi.Services.Implementations;
@@ -19,6 +23,7 @@ using SelfWebsiteApi.Services.Interfaces.Auth;
 using SelfWebsiteApi.Services.Interfaces.Elastic;
 using SelfWebsiteApi.Services.Interfaces.EntityFramework;
 using SelfWebsiteApi.Services.Interfaces.Mongo;
+using StackExchange.Redis;
 using System.Net;
 using System.Text;
 using Telegram.Bot;
@@ -105,15 +110,21 @@ builder.Services.AddTransient<IResumeService, ResumeService>();
 
 builder.Services.AddSingleton<IMapperProvider, MapperProvider>();
 
+//Redis
+var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("Redis:PixivLinksDbUrl"));
+builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+
 //TelegramBot
 if (builder.Configuration.GetValue<bool>("TelegramBots:IsActive"))
 {
     builder.Services.AddHostedService<PixivLinksBotWebhookService>();
     builder.Services.AddScoped<PixivLinksBotService>();
+    builder.Services.AddScoped<IPixivLinksBotCacheService, PixivLinksBotCacheService>();
     builder.Services.AddHttpClient("PixivLinksBotClient")
         .AddTypedClient<ITelegramBotClient>(
         httpClient => new TelegramBotClient(builder.Configuration.GetValue<string>("TelegramBots:PixivLinksBotToken"), httpClient));
 }
+
 var app = builder.Build();
 
 //if (app.Environment.IsDevelopment())

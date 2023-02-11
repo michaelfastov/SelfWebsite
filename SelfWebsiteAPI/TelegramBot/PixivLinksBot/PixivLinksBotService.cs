@@ -9,7 +9,8 @@ namespace TelegramBot.PixivLinksBot
         private readonly IHubContext<PixivLinksHub> _pixivLinksHubContext;
         private readonly ILogger<PixivLinksBotService> _logger;
 
-        public PixivLinksBotService(IHubContext<PixivLinksHub> pixivLinksHubContext,
+        public PixivLinksBotService(
+            IHubContext<PixivLinksHub> pixivLinksHubContext,
             ILogger<PixivLinksBotService> logger)
         {
             _pixivLinksHubContext = pixivLinksHubContext;

@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { PixivLinksSignalrService } from '../../services/pixiv-links-signalr.service';
 import { ILinkPreview } from 'src/app/models/ILinkPreview';
 import { LinkPreviewService } from 'src/app/services/link-preview.service';
+import { RedisCacheService } from 'src/app/services/redis-cache.service';
 
 @Component({
   selector: 'app-pixiv-links',
@@ -13,16 +14,33 @@ export class PixivLinksComponent implements OnInit, OnDestroy {
   links: ILinkPreview[] = [];
   allFeedSubscription: any;
 
-  constructor(private pixivLinksSignalrService: PixivLinksSignalrService, private linkPreviewService: LinkPreviewService) { }
+  constructor(
+    private redisCacheService: RedisCacheService,
+    private pixivLinksSignalrService: PixivLinksSignalrService,
+    private linkPreviewService: LinkPreviewService) { }
 
   ngOnInit(): void {
     this.pixivLinksSignalrService.startConnection().then(() => {
       this.pixivLinksSignalrService.listen();
       this.allFeedSubscription = this.pixivLinksSignalrService.AllFeedObservable
         .subscribe((res: string) => {
-          this.OnPreview(res)
+          this.OnPreview(res);
+          this.redisCacheService.CachePixivLinkForUser(res).subscribe();
         });
     });
+
+    this.DisplayCachedLinks()
+  }
+
+  DisplayCachedLinks() {
+    this.redisCacheService.GetCachedLinksForUser().subscribe(
+      cachedLinks => {
+        if (cachedLinks != null) {
+          cachedLinks.forEach(link => {
+            this.OnPreview(link);
+          });
+        }
+      });
   }
 
   OnPreview(link: string) {

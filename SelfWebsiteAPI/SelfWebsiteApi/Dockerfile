@@ -9,6 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["SelfWebsiteApi/SelfWebsiteApi.csproj", "SelfWebsiteApi/"]
 COPY ["TelegramBot/TelegramBot.csproj", "TelegramBot/"]
+COPY ["RedisCache/RedisCache.csproj", "RedisCache/"]
 RUN dotnet restore "SelfWebsiteApi/SelfWebsiteApi.csproj"
 COPY . .
 WORKDIR "/src/SelfWebsiteApi"

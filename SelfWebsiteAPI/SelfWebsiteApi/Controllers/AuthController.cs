@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.HttpSys;
 using SelfWebsiteApi.Database;
+using SelfWebsiteApi.Database.Entities.Auth;
 using SelfWebsiteApi.Models.Auth;
 using SelfWebsiteApi.Services.Interfaces.Auth;
 using System.Security.Claims;

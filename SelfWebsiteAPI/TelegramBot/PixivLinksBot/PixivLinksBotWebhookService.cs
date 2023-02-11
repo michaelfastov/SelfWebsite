@@ -32,7 +32,7 @@ namespace TelegramBot.PixivLinksBot
         {
             using var scope = _services.CreateScope();
             var botClient = scope.ServiceProvider.GetRequiredService<ITelegramBotClient>();
-            //substitute with ngrok command for local debug: ngrok http 8443 --host-header="localhost:8443"
+            //substitute with ngrok command for local debug: ngrok http --host-header=localhost https://localhost:7131
             var serverLink = _configuration.GetSection("Settings")["ServerLink"];
             var botToken = _configuration.GetSection("TelegramBots")["PixivLinksBotToken"];
             var webhookAddress = @$"{serverLink}/{botToken}";

@@ -2,17 +2,17 @@
 using Telegram.Bot.Types;
 using TelegramBot.PixivLinksBot;
 
-namespace SelfWebsiteApi.Controllers
+namespace SelfWebsiteApi.Controllers;
+
+public class PixivLinksBotController : ControllerBase
 {
-    public class PixivLinksBotController : ControllerBase
+    [HttpPost]
+    public async Task<IActionResult> Post(
+        [FromServices] PixivLinksBotService pixivLinksBotService,
+        [FromBody] Update update)
     {
-        [HttpPost]
-        public async Task<IActionResult> Post(
-            [FromServices] PixivLinksBotService pixivLinksBotService,
-            [FromBody] Update update)
-        {
-            await pixivLinksBotService.ProcessUpdate(update);
-            return Ok();
-        }
+        await pixivLinksBotService.ProcessUpdate(update);
+
+        return Ok();
     }
 }
